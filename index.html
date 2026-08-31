@@ -718,7 +718,7 @@ function globalSearch(q){var box=document.getElementById('sres');if(!box)return;
 function showLogin(){document.getElementById('login').style.display='flex';document.getElementById('login-user').focus();}
 function hideLogin(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='flex';}
 function ensureUsuarios(){if(!DB.usuarios||!DB.usuarios.length){DB.usuarios=[{id:'u1',nome:'Administrador',usuario:'admin',senha:'admin123'},{id:'u2',nome:'Giulia',usuario:'giulia',senha:'1234'}];}var temA=DB.usuarios.some(function(x){return x.usuario==='admin';});if(!temA)DB.usuarios.push({id:'u'+(DB.usuarios.length+1),nome:'Administrador',usuario:'admin',senha:'admin123'});var temG=DB.usuarios.some(function(x){return x.usuario==='giulia';});if(!temG)DB.usuarios.push({id:'u'+(DB.usuarios.length+1),nome:'Giulia',usuario:'giulia',senha:'1234'});save();}
-function perfilDe(email){var m={'giulia.santos@lindenberg.com.br':'Engenharia','admin@lindenberg.com':'Administrador'};return m[(email||'').toLowerCase()]||'Visitante';}
+function perfilDe(email){var m={'giulia.santos@lindenberg.com.br':'Administrador','admin@lindenberg.com':'Administrador'};return m[(email||'').toLowerCase()]||'Visitante';}
 function doLogin(){
   var email=document.getElementById('login-user').value.trim();
   var senha=document.getElementById('login-pass').value;
