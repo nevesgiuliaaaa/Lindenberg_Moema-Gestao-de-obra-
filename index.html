@@ -762,7 +762,7 @@ function carregarPerfil(user){
       .catch(function(){aplicar(padrao);});
   }else{aplicar(padrao);}
 }
-    ;then(function(r){
+    .then(function(r){
       DB.session=r.user.uid;save();hideLogin();render();
     })
     .catch(function(e){
