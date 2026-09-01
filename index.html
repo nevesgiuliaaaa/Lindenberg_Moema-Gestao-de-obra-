@@ -632,7 +632,7 @@ case 'editar-foto':{var fo=DB.fotos.find(function(x){return x.id===el.dataset.id
 case 'excluir-foto':{var fo2=DB.fotos.find(function(x){return x.id===el.dataset.id;});if(fo2)confirmDialog('Excluir esta foto?',function(){DB.fotos=DB.fotos.filter(function(x){return x.id!==fo2.id;});save();closeModal();toast('Foto excluída.');rerender();});break;}
 case 'salvar-foto':saveFoto(el.dataset.id);break;
 case 'login':doLogin();break;
-case 'logout':DB.session=null;save();document.getElementById('app').style.display='none';closeSidebar();showLogin();break;
+case'logout':firebase.auth().signOut();break;
 case 'add-usuario':openUserModal(null);break;
 case 'editar-usuario':{var u=DB.usuarios.find(function(x){return x.id===el.dataset.id;});if(u)openUserModal(u);break;}
 case 'alterar-senha':openSenhaModal(el.dataset.id);break;
@@ -719,17 +719,56 @@ function showLogin(){document.getElementById('login').style.display='flex';docum
 function hideLogin(){document.getElementById('login').style.display='none';document.getElementById('app').style.display='flex';}
 function ensureUsuarios(){if(!DB.usuarios||!DB.usuarios.length){DB.usuarios=[{id:'u1',nome:'Administrador',usuario:'admin',senha:'admin123'},{id:'u2',nome:'Giulia',usuario:'giulia',senha:'1234'}];}var temA=DB.usuarios.some(function(x){return x.usuario==='admin';});if(!temA)DB.usuarios.push({id:'u'+(DB.usuarios.length+1),nome:'Administrador',usuario:'admin',senha:'admin123'});var temG=DB.usuarios.some(function(x){return x.usuario==='giulia';});if(!temG)DB.usuarios.push({id:'u'+(DB.usuarios.length+1),nome:'Giulia',usuario:'giulia',senha:'1234'});save();}
 function perfilDe(email){var m={'giulia.santos@lindenberg.com.br':'Administrador','admin@lindenberg.com':'Administrador'};return m[(email||'').toLowerCase()]||'Visitante';}
+function emailDeLogin(entrada){
+  entrada=(entrada||'').trim().toLowerCase();
+  if(!entrada)return '';
+  if(entrada.indexOf('@')>-1)return entrada;
+  return entrada+'@lindenbergmoema.local';
+}
 function doLogin(){
-  var email=document.getElementById('login-user').value.trim();
+  var email=emailDeLogin(document.getElementById('login-user').value);
   var senha=document.getElementById('login-pass').value;
+  if(!email||!senha){toast('Informe usuário e senha.');return;}
   firebase.auth().signInWithEmailAndPassword(email,senha)
-    .then(function(r){
+    .catch(function(e){toast('Usuário ou senha inválidos.');});
+}
+function initAuth(){
+  firebase.auth().onAuthStateChanged(function(user){
+    if(user){ carregarPerfil(user); }
+    else{
+      DB.session=null;DB.sessao=null;save();
+      var app=document.getElementById('app');if(app)app.style.display='none';
+      if(typeof closeSidebar==='function')closeSidebar();
+      if(typeof showLogin==='function')showLogin();
+    }
+  });
+}
+function carregarPerfil(user){
+  var uid=user.uid;
+  var padrao={nome:user.displayName||user.email,email:user.email,tipoAcesso:'Visitante',permissoes:[]};
+  function aplicar(p){
+    p.nome=p.nome||user.displayName||user.email;
+    p.email=p.email||user.email;
+    p.tipoAcesso=p.tipoAcesso||'Visitante';
+    p.permissoes=p.permissoes||[];
+    DB.sessao={uid:uid,nome:p.nome,email:p.email,tipoAcesso:p.tipoAcesso,permissoes:p.permissoes};
+    DB.session=uid;save();
+    if(typeof hideLogin==='function')hideLogin();
+    render();
+  }
+  if(window.firebase&&firebase.firestore){
+    firebase.firestore().collection('usuarios').doc(uid).get()
+      .then(function(doc){aplicar(doc.exists?doc.data():padrao);})
+      .catch(function(){aplicar(padrao);});
+  }else{aplicar(padrao);}
+}
+    ;then(function(r){
       DB.session=r.user.uid;save();hideLogin();render();
     })
     .catch(function(e){
       toast('Usuário ou senha inválidos.');
     });
-}
+
 document.getElementById('login-user').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});/* ============================================================
    RASTREABILIDADE DE CERÂMICA — MÓDULO COMPLETO
    ============================================================ */
