@@ -762,13 +762,6 @@ function carregarPerfil(user){
       .catch(function(){aplicar(padrao);});
   }else{aplicar(padrao);}
 }
-    .then(function(r){
-      DB.session=r.user.uid;save();hideLogin();render();
-    })
-    .catch(function(e){
-      toast('Usuário ou senha inválidos.');
-    });
-
 document.getElementById('login-user').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});/* ============================================================
    RASTREABILIDADE DE CERÂMICA — MÓDULO COMPLETO
    ============================================================ */
