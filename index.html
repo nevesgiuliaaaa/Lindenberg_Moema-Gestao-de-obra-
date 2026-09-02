@@ -135,7 +135,18 @@ var PERM_MODULES=[['material','Controle de Material'],['almoxarifado','Controle 
 function defaultPermissoes(){return {'Administrador':['*'],'Engenharia':['*'],'Almoxarifado':['material','almoxarifado'],'Obra':[],'Visualização':[]};}
 function ensurePermissoes(){if(!DB.permissoes||typeof DB.permissoes!=='object'){DB.permissoes=defaultPermissoes();}else{var d=defaultPermissoes();Object.keys(d).forEach(function(k){if(!(k in DB.permissoes))DB.permissoes[k]=d[k];});}return DB.permissoes;}
 function canEdit(){var u=currentUser();if(!u)return false;if(u.permissao==='Visualização')return false;if(u.permissao==='Administrador'||u.permissao==='Engenharia')return true;ensurePermissoes();var list=DB.permissoes[u.permissao];if(!list)return false;if(list.indexOf('*')>-1)return true;return list.indexOf(routeMod())>-1;}
-function canEditModulo(mod){if(!mod)mod=routeMod();var u=currentUser();if(!u)return false;if(u.permissao==='Visualização')return false;if(u.permissao==='Administrador'||u.permissao==='Engenharia')return true;ensurePermissoes();var list=DB.permissoes[u.permissao];if(!list)return false;if(list.indexOf('*')>-1)return true;return list.indexOf(mod)>-1;}
+function canEditModulo(mod){
+  if(!mod)mod=routeMod();
+  var u=currentUser();
+  if(!u)return false;
+  if(u.tipoAcesso==='Visualização')return false;
+  if(u.tipoAcesso==='Administrador'||u.tipoAcesso==='Engenharia')return true;
+  ensurePermissoes();
+  var list=DB.permissoes[u.tipoAcesso];
+  if(!list)return false;
+  if(list.indexOf('*')>-1)return true;
+  return list.indexOf(mod)>-1;
+}
 function statusBadge(st){var map={'Concluída':'bve','Concluído':'bve','Em andamento':'bam','Não iniciada':'bci','Não iniciado':'bci','Atrasada':'bvm','Atrasado':'bvm','Chegou na obra':'bve','Pendente':'bdo','Em análise':'baz','Aprovado':'bve','Obsoleto':'bci','Liberado':'bve','Reprovado':'bvm','Resolvido':'bve','Aberto':'bvm','Em tratamento':'bam','Em estoque':'bve','Consumida':'bci','Estoque baixo':'bam','Sem estoque':'bci','Excelente':'bve','Bom':'baz','Regular':'bam','Ruim':'bvm','NORMAL':'bve','ESTOQUE BAIXO':'bam','SEM ESTOQUE':'bci','CONSUMO ACIMA DO PREVISTO':'bvm','Instalado':'bve','Retirado':'bam'};return '<span class="badge '+(map[st]||'bci')+'"><span class="bd"></span>'+esc(st||'—')+'</span>';}
 function fldHtml(k,label,type,val,opts){val=val==null?'':val;if(type==='select'){var o=opts.map(function(x){return '<option '+(String(x)===String(val)?'selected':'')+'>'+esc(x)+'</option>';}).join('');return '<div class="fld"><label>'+esc(label)+'</label><select data-f="'+k+'">'+o+'</select></div>';}if(type==='textarea')return '<div class="fld full"><label>'+esc(label)+'</label><textarea data-f="'+k+'">'+esc(val)+'</textarea></div>';return '<div class="fld"><label>'+esc(label)+'</label><input data-f="'+k+'" type="'+type+'" value="'+esc(val)+'"></div>';}
 function servicosDa(etapa,cat){return DB.servicos.filter(function(s){return s.etapa===etapa&&(!cat||s.categoria===cat);});}
