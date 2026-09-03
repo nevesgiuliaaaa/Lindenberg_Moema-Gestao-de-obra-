@@ -137,7 +137,7 @@ function ensurePermissoes(){if(!DB.permissoes||typeof DB.permissoes!=='object'){
 function canEdit(){var u=currentUser();if(!u)return false;if(u.permissao==='Visualização')return false;if(u.permissao==='Administrador'||u.permissao==='Engenharia')return true;ensurePermissoes();var list=DB.permissoes[u.permissao];if(!list)return false;if(list.indexOf('*')>-1)return true;return list.indexOf(routeMod())>-1;}
 function canEditModulo(mod){
   if(!mod)mod=routeMod();
-  var u=currentUser();
+  var u=currentUser()||DB.sessao;
   if(!u)return false;
   if(u.tipoAcesso==='Visualização')return false;
   if(u.tipoAcesso==='Administrador'||u.tipoAcesso==='Engenharia')return true;
