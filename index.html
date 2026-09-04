@@ -6,9 +6,6 @@
 <title>Lindenberg Moema — Gestão de Obra</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* CORREÇÃO GERAL — card nunca ultrapassa a própria borda */
-*{box-sizing:border-box;}
-.card,.hs>*,.dc-item,.oc,.service-card{box-sizing:border-box;width:100%;max-width:100%;overflow:hidden;}
 .dc-secao{margin:18px 0;}
 .dc-secao h4{font-size:15px;margin:0 0 6px;color:var(--do);}
 .dc-faixa{display:flex;gap:12px;overflow-x:auto;padding:8px 4px 12px;scroll-snap-type:x proximity;}
@@ -63,6 +60,9 @@
 @media(max-width:900px){#sidebar{transform:translateX(-105%)}#sidebar.open{transform:translateX(0);box-shadow:20px 0 60px rgba(0,0,0,.18)}#main{margin-left:0;padding:16px 18px 60px}.burger{display:flex}.g2,.g3,.g4{grid-template-columns:1fr}.search{width:170px}.hero h1{font-size:38px}.fg{grid-template-columns:1fr}}
 @media(max-width:520px){.tbr .sw{display:none}.crumb{display:none}.tb{margin-bottom:16px}}
 .empty{text-align:center;color:var(--ci);padding:30px 10px;font-size:13px}
+/* CORREÇÃO — a borda envolve o card por completo, sem cortar conteúdo */
+*{box-sizing:border-box;}
+.card,.hs>*,.dc-item,.oc,.service-card{box-sizing:border-box;width:auto;max-width:100%;height:auto;overflow:visible;}
 </style>
 </head>
 <body>
