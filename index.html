@@ -60,8 +60,9 @@
 @media(max-width:900px){#sidebar{transform:translateX(-105%)}#sidebar.open{transform:translateX(0);box-shadow:20px 0 60px rgba(0,0,0,.18)}#main{margin-left:0;padding:16px 18px 60px}.burger{display:flex}.g2,.g3,.g4{grid-template-columns:1fr}.search{width:170px}.hero h1{font-size:38px}.fg{grid-template-columns:1fr}}
 @media(max-width:520px){.tbr .sw{display:none}.crumb{display:none}.tb{margin-bottom:16px}}
 .empty{text-align:center;color:var(--ci);padding:30px 10px;font-size:13px}
-.card,.hs>*,.dc-item,.oc,.service-card{box-sizing:border-box;width:100%;max-width:100%;overflow:hidden;}
-.card,.hs>*,.dc-item,.oc,.service-card{box-sizing:border-box;width:auto;max-width:100%;height:auto;overflow:visible;}
+*{box-sizing:border-box;}
+.dc-faixa{display:flex;flex-direction:row;flex-wrap:nowrap;align-items:stretch;gap:12px;overflow-x:auto;padding:8px 4px 12px;width:100%;}
+.dc-item{flex:0 0 auto;width:240px;min-width:240px;max-width:240px;box-sizing:border-box;height:auto;overflow:visible;border:1px solid var(--cl);border-radius:10px;padding:12px;background:#fff;}
 </style>
 </head>
 <body>
