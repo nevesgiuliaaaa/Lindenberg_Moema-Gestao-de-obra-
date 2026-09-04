@@ -6,6 +6,9 @@
 <title>Lindenberg Moema — Gestão de Obra</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  /* CORREÇÃO GERAL — card nunca ultrapassa a própria borda */
+*{box-sizing:border-box;}
+.card,.hs>*,.dc-item,.oc,.service-card{box-sizing:border-box;width:100%;max-width:100%;overflow:hidden;}
 .dc-secao{margin:18px 0;}
 .dc-secao h4{font-size:15px;margin:0 0 6px;color:var(--do);}
 .dc-faixa{display:flex;gap:12px;overflow-x:auto;padding:8px 4px 12px;scroll-snap-type:x proximity;}
